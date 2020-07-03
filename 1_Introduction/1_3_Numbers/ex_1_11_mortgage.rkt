@@ -79,7 +79,7 @@
                 (add1
                  (mortgage-num-payments updated-balance-mortgage))
                 (+ (mortgage-total-paid updated-balance-mortgage)
-                   (payment mortgage))))
+                   (payment updated-balance-mortgage))))
      (display (mortgage-num-payments updated-mortgage))
      (display " ")
      (display (mortgage-total-paid updated-mortgage))

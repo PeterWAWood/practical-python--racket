@@ -14,7 +14,7 @@
     [(<= principal 0) total-paid]
     [else (set! number-months (add1 number-months))
           (set! principal (* principal (+ 1 (/ rate 12))))
-          (when (> payment principal) (set! payment principal))
+          (set! payment (min payment principal))
           (set! principal (- principal payment))
           (set! total-paid (+ total-paid payment))
           (when (and (>= number-months extra-payment-start-month)
