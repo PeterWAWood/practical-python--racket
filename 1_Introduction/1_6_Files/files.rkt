@@ -1,4 +1,5 @@
 #lang racket
+(require racket/runtime-path)
 
 (define-namespace-anchor anchor)
 (define ns (namespace-anchor->namespace anchor))
@@ -18,20 +19,11 @@
 (define (title ttl) (displayln (string-upcase ttl)))
 
 ; definitions to handle script being run from different directories
-(define script-dir (path-only (resolved-module-path-name
-  (variable-reference->resolved-module-path
-   (#%variable-reference)))))
-(define foo.txt (build-path script-dir "foo.txt"))
-(define bar.txt (build-path script-dir "bar.txt"))
-(define outfile.txt
-  (build-path script-dir "outfile.txt"))
-
-(define data-dir
-  (simplify-path (build-path script-dir "../../Data/")))
-(define Data/portfolio.csv
-  (build-path data-dir "portfolio.csv"))
-(define Data/portfolio.csv.gz
-  (build-path data-dir "portfolio.csv.gz"))
+(define-runtime-path foo.txt "foo.txt")
+(define-runtime-path bar.txt "bar.txt")
+(define-runtime-path outfile.txt "outfile.txt")
+(define-runtime-path Data/portfolio.csv "../../Data/portfolio.csv")
+(define-runtime-path Data/portfolio.csv.gz "../../Data/portfolio.csv.gz")
 
 (title "1.6 File Management")
 (separator)
