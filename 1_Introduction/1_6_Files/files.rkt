@@ -227,3 +227,5 @@
 (racket '(gunzip-through-ports gzip csv))
 (racket '(displayln (get-output-string csv)))
 
+; tidy up
+(when (file-exists? outfile.txt) (delete-file outfile.txt))
