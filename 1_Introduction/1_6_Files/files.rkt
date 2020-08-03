@@ -49,7 +49,8 @@
 (expect "start12345678901234567890end\nline 2\nline 3\n")
 ; read in racket is line oriented, so use port->string function
 (racket '(displayln (port->string f)))
- 
+(racket "There is an easier way to read a file into a string in Racket")
+(racket '(file->string foo.txt)) 
 (separator)
 
 (python "# Read only up to 'maxbytes' bytes")
@@ -123,6 +124,7 @@
 (title "Exercises")
 (separator)
 
+(title "Exercises: pre-amble")
 (python ">>> import os")
 (python ">>> os.getcwd()")
 (racket '(displayln (current-directory)))
@@ -160,12 +162,11 @@
           (file->lines Data/portfolio.csv #:mode 'text)))
 
 (separator)
-(python ">>> f = open('../../Data/portfolio.csv', 'rt')")
+(python ">>> f = open('Data/portfolio.csv', 'rt')")
 (python ">>> headers = next(f)")
 (python ">>> headers")
 (python ">>> for line in f:")`
 (python "        print(line, end='')")
-(expect "name,shares,price")
 (expect "\"AA\",100,32.20")
 (expect "\"IBM\",50,91.10")
 (expect "\"CAT\",150,83.44")
@@ -174,8 +175,6 @@
 (expect "\"MSFT\",50,65.10")
 (expect "\"IBM\",100,70.44")
 (racket '(define csv-lines (file->lines Data/portfolio.csv #:mode 'text)))
-(racket '(define headers (first csv-lines)))
-(racket '(displayln headers) )
 (racket '(for-each (lambda (l) (displayln l)) (rest csv-lines)))
 
 (separator)
@@ -186,10 +185,10 @@
 (racket '(define headers (read-line f)))
 ; this uses the fact that the headers have been "removed" from the port
 ; so then reads the whole file into memory. Just liek the Python example
-(racket '(define rows (port->string f)))
+(racket '(define rows (port->lines f)))
 (racket '(close-input-port f))
 (racket '(displayln headers))
-(racket '(for-each (lambda (r) (displayln r)) (string-split rows "\n")))
+(racket '(for-each (lambda (r) (displayln r)) rows ))
 
 (separator)
 (title "Exercise 1.27: Reading a data file")
@@ -199,8 +198,9 @@
 (racket '(define (pcost rows)
  (cond
    [(empty? rows) 0]
-   [else (+ (* (string->number (second (string-split (first rows) ",")))
-               (string->number (third (string-split (first rows) ","))))
+   [else (define row (string-split (first rows) ","))
+         (+ (* (string->number (second row))
+               (string->number (third row)))
             (pcost (rest rows)))])))
 (racket '(display "Total cost "))
 (racket '(displayln (pcost (rest csv-rows))))
